@@ -14,7 +14,6 @@ public class HiloCliente extends Thread {
 
 		this.input = new BufferedReader(
 				new InputStreamReader(this.cliente.getInputStream()));
-
 	}
 
 	@Override
@@ -23,8 +22,7 @@ public class HiloCliente extends Thread {
 			while (true) {
 				String mensajeRecibido = input.readLine();
 
-				System.out.println(
-						"Recibido del servidor: " + mensajeRecibido.trim());
+				System.out.println("[Servidor] " + mensajeRecibido.trim());
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

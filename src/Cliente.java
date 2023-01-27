@@ -10,30 +10,24 @@ public class Cliente {
 		try {
 			Socket cliente = new Socket("localhost", Servidor.PUERTO);
 
-			PrintWriter output = new PrintWriter(cliente.getOutputStream(),
-					true);
-
 			HiloCliente hiloCliente = new HiloCliente(cliente);
 			// Hacemos un hilo que este imprimiendo constantemente cualquier
 			// mensaje que mande el servidor
-
 			hiloCliente.start();
+
+			//
+
+			PrintWriter output = new PrintWriter(cliente.getOutputStream(),
+					true);
 
 			Scanner sc = new Scanner(System.in);
 
-			System.out.print("Introduce un mensaje: ");
-			String cadena = sc.nextLine();
-
+			String cadena = "";
 			while (cadena != null) {
 
-				output.println(cadena);
-				System.out.println("Enviado al servidor!");
-
-				Thread.sleep(10);
-
-				System.out.print("Vuelve a introducir un mensaje: ");
 				cadena = sc.nextLine();
 
+				output.println(cadena);
 			}
 
 			output.close();
@@ -42,10 +36,6 @@ public class Cliente {
 
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
 		}
-
 	}
-
 }

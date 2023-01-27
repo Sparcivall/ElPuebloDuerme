@@ -6,12 +6,14 @@ import java.net.Socket;
 
 public class HiloJuego extends Thread {
 	private Socket socketServidor = null;
+	private ElPuebloDuerme pueblo;
 
 	private BufferedReader input;
 	private PrintWriter output;
 
-	public HiloJuego(Socket s) {
+	public HiloJuego(Socket s, ElPuebloDuerme pueblo) {
 		this.socketServidor = s;
+		this.pueblo = pueblo;
 
 		try {
 
@@ -30,16 +32,24 @@ public class HiloJuego extends Thread {
 	public void run() {// ESTE HILO SE COMUNICA CON CADA CLIENTE
 		try {
 
-			String cadena = "";
-
 			System.out.println("COMUNICO CON: " + socketServidor.toString());
 
-			while (!cadena.trim().equals("*")) {
+			output.println("Escribe el nombre de tu personaje");
 
-				cadena = input.readLine();
+			String nombreJugador = input.readLine();
 
-				output.println(cadena.trim());
-			}
+			Personaje personaje = new Personaje(nombreJugador);
+			pueblo.anadirPersonaje(personaje);
+
+			output.println("Tu personaje ha sido registrado!");
+
+			// String cadena = "";
+			// while (!cadena.trim().equals("*")) {
+			//
+			// cadena = input.readLine();
+			//
+			// output.println(cadena.trim());
+			// }
 
 			System.out.println("FIN CON: " + socketServidor.toString());
 
@@ -51,4 +61,5 @@ public class HiloJuego extends Thread {
 			e.printStackTrace();
 		}
 	}
+
 }

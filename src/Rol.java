@@ -1,0 +1,4 @@
+
+public enum Rol {
+	ALDEANO, LOBO, BRUJA, CURA, GUARDIAN, ALCALDE;
+}
