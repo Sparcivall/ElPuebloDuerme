@@ -11,6 +11,8 @@ public class HiloJuego extends Thread {
 	private BufferedReader input;
 	private PrintWriter output;
 
+	private Rol rolJugador;
+
 	public HiloJuego(Socket s, ElPuebloDuerme pueblo) {
 		this.socketServidor = s;
 		this.pueblo = pueblo;
@@ -43,13 +45,15 @@ public class HiloJuego extends Thread {
 
 			output.println("Tu personaje ha sido registrado!");
 
-			// String cadena = "";
-			// while (!cadena.trim().equals("*")) {
-			//
-			// cadena = input.readLine();
-			//
-			// output.println(cadena.trim());
-			// }
+			System.out.println(Thread.currentThread().getName()
+					+ " se va a dormir esperando al notify()");
+			pueblo.esperarComienzo();
+
+			// EMPIEZA LA PARTIDA
+
+			pueblo.asignarRoles();
+
+			// FIN DE LA PARTIDA
 
 			System.out.println("FIN CON: " + socketServidor.toString());
 
@@ -58,6 +62,8 @@ public class HiloJuego extends Thread {
 			socketServidor.close();
 
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}

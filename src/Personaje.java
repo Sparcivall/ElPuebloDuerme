@@ -12,4 +12,7 @@ public class Personaje {
 		this.rol = rol;
 	}
 
+	public Rol getRol() {
+		return rol;
+	}
 }

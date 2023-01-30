@@ -18,7 +18,7 @@ public class Servidor {
 
 		System.out.println("ESCRIBE start PARA EMPEZAR!");
 		if (sc.nextLine().equals("start")) {
-			// hiloServidor.arrancar();
+			hiloServidor.empezarPartida();
 		}
 
 		// hiloServidor.arrancar // PARA ARRANCAR LA PARTIDA USAR LOS METODOS

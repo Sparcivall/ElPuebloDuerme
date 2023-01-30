@@ -3,14 +3,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 
 public class HiloServidor extends Thread {
 
 	private ServerSocket servidor;
-
-	private ArrayList<HiloJuego> hilosJuego;// SI PUEDO EVITARLO MEJOR UNO USAR
-											// ARRAY DE HILOS
 
 	private BufferedReader input;
 	private PrintWriter output;
@@ -19,7 +15,6 @@ public class HiloServidor extends Thread {
 
 	public HiloServidor(ServerSocket servidor) {
 		this.servidor = servidor;
-		this.hilosJuego = new ArrayList<>();
 		this.elPuebloDuerme = new ElPuebloDuerme();
 	}
 
@@ -38,8 +33,6 @@ public class HiloServidor extends Thread {
 
 				HiloJuego hilo = new HiloJuego(socketServidor, elPuebloDuerme);
 
-				hilosJuego.add(hilo);
-
 				hilo.start();
 			}
 
@@ -49,6 +42,6 @@ public class HiloServidor extends Thread {
 	}
 
 	public void empezarPartida() {
-
+		elPuebloDuerme.despertarHilos();
 	}
 }
