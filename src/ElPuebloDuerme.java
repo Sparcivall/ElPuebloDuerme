@@ -61,10 +61,6 @@ public class ElPuebloDuerme {
 	}
 
 	public void empezarPartida() {
-		for (Personaje p : listaPersonajes) {
-			System.out.println(p);
-		}
-
 		while (true) {
 
 			// loop del juego
