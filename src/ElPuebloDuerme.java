@@ -36,7 +36,6 @@ public class ElPuebloDuerme {
 		if (listaPersonajes.size() > 7) {// ALCALDE
 			asignarRol(Rol.ALCALDE);
 		}
-
 	}
 
 	private void asignarRol(Rol rol) {
@@ -55,6 +54,23 @@ public class ElPuebloDuerme {
 		}
 
 		return listaAldeanos;
+	}
+
+	public ArrayList<Personaje> getListaJugadores() {
+		return listaPersonajes;
+	}
+
+	public void empezarPartida() {
+		for (Personaje p : listaPersonajes) {
+			System.out.println(p);
+		}
+
+		while (true) {
+
+			// loop del juego
+
+			break;
+		}
 	}
 
 	// HACER QUE LOS HILOS ESPEREN CON WAIT Y DESPERTARLOS CON NOTIFY

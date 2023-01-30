@@ -11,8 +11,6 @@ public class HiloJuego extends Thread {
 	private BufferedReader input;
 	private PrintWriter output;
 
-	private Rol rolJugador;
-
 	public HiloJuego(Socket s, ElPuebloDuerme pueblo) {
 		this.socketServidor = s;
 		this.pueblo = pueblo;
@@ -51,7 +49,12 @@ public class HiloJuego extends Thread {
 
 			// EMPIEZA LA PARTIDA
 
-			pueblo.asignarRoles();
+			while (true) {
+
+				imprimirListaJugadores();
+
+				break;
+			}
 
 			// FIN DE LA PARTIDA
 
@@ -65,6 +68,12 @@ public class HiloJuego extends Thread {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void imprimirListaJugadores() {
+		for (Personaje p : pueblo.getListaJugadores()) {
+			output.println(p);
 		}
 	}
 

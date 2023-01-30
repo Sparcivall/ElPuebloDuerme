@@ -26,6 +26,8 @@ public class HiloCliente extends Thread {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (NullPointerException e) {
+			System.out.println("{ CONEXIÓN CON EL SERVIDOR TERMINADA }");
 		}
 	}
 }

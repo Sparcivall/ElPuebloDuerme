@@ -15,4 +15,9 @@ public class Personaje {
 	public Rol getRol() {
 		return rol;
 	}
+
+	@Override
+	public String toString() {
+		return nombreJugador + " " + rol;// quitar de aqui el rol
+	}
 }

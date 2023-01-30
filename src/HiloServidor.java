@@ -43,5 +43,7 @@ public class HiloServidor extends Thread {
 
 	public void empezarPartida() {
 		elPuebloDuerme.despertarHilos();
+		elPuebloDuerme.asignarRoles();
+		elPuebloDuerme.empezarPartida();
 	}
 }
