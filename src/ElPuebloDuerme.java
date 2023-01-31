@@ -4,6 +4,8 @@ public class ElPuebloDuerme {
 
 	private ArrayList<Personaje> listaPersonajes;
 
+	private int numeroVotos = 0;
+
 	public ElPuebloDuerme() {
 		this.listaPersonajes = new ArrayList<>();
 	}
@@ -60,12 +62,33 @@ public class ElPuebloDuerme {
 		return listaPersonajes;
 	}
 
-	public void empezarPartida() {
-		while (true) {
+	public String getPreguntaPersonaje(Rol rol) {
+		switch (rol) {
+			case ALDEANO :
+				return ("¿A quien votas para echar del pueblo?");
+			case LOBO :
+				return ("¿A que persona quieres matar?");
+			case BRUJA :
+				return ("Revive o mata a quien quieras");
+			case CURA :
+				return ("¿A quien echas agua bendita? (Si te equivocas moriras)");
+			case ALCALDE :
+				return ("¿A quien votas para echar del pueblo? (Una vez puedes votar doble)");
+			case GUARDIAN :
+				return ("¿A quien quieres proteger? (Una vez puedes hacerlo dos veces)");
+			default :
+				return ("ERROR, ESTE PERSONAJE NO TIEN UN ROL");
+		}
+	}
 
-			// loop del juego
+	synchronized public void esperarAlRestoVotos() throws InterruptedException {
+		numeroVotos++;
 
-			break;
+		if (numeroVotos == listaPersonajes.size()) {
+			this.despertarHilos();
+			numeroVotos = 0;
+		} else {
+			wait();
 		}
 	}
 

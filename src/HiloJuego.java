@@ -11,6 +11,8 @@ public class HiloJuego extends Thread {
 	private BufferedReader input;
 	private PrintWriter output;
 
+	private Personaje personaje;
+
 	public HiloJuego(Socket s, ElPuebloDuerme pueblo) {
 		this.socketServidor = s;
 		this.pueblo = pueblo;
@@ -38,7 +40,7 @@ public class HiloJuego extends Thread {
 
 			String nombreJugador = input.readLine();
 
-			Personaje personaje = new Personaje(nombreJugador);
+			this.personaje = new Personaje(nombreJugador);
 			pueblo.anadirPersonaje(personaje);
 
 			output.println("Tu personaje ha sido registrado!");
@@ -55,7 +57,20 @@ public class HiloJuego extends Thread {
 
 				imprimirListaJugadores();
 
-				break;
+				Thread.sleep(500);
+
+				// Imprime la pregunta que el servidor le hace a cada personaje
+				output.println(pueblo.getPreguntaPersonaje(personaje.getRol()));
+
+				String comando = input.readLine();
+
+				pueblo.esperarAlRestoVotos();// hace que cada hilo espere a que
+												// el resto acabe de votar
+
+				if (comando.equals("fin")) {
+					break;
+				}
+
 			}
 
 			// FIN DE LA PARTIDA
