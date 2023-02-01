@@ -3,6 +3,7 @@ import java.util.ArrayList;
 public class ElPuebloDuerme {
 
 	private ArrayList<Personaje> listaPersonajes;
+	private int[] votos;
 
 	private int numeroVotos = 0;
 
@@ -56,6 +57,50 @@ public class ElPuebloDuerme {
 		}
 
 		return listaAldeanos;
+	}
+
+	private Personaje getPersonaje(String nombre) {
+		for (Personaje p : listaPersonajes) {
+			if (p.getNombreJugador().equals(nombre)) {
+				return p;
+			}
+		}
+		return null;
+	}
+
+	public boolean purgarPersonaje(Personaje p) {
+
+		if (!p.estaVivo()) {
+			listaPersonajes.remove(listaPersonajes.indexOf(p));
+			return true;
+		}
+		return false;
+	}
+
+	synchronized public void accionPersonaje(Rol rol, String comando) {
+
+		this.votos = new int[listaPersonajes.size()];
+
+		switch (rol) {
+			case ALDEANO :
+				votos[listaPersonajes.indexOf(getPersonaje(comando))]++;
+				System.out.println("UN ALDEANO HA VOTADO");
+				break;
+			case LOBO :// le dice al personaje que esta muerto
+				getPersonaje(comando).morir();
+				break;
+			case BRUJA :
+
+				break;
+			case CURA :
+
+				break;
+			case ALCALDE :
+
+				break;
+			case GUARDIAN :
+
+		}
 	}
 
 	public ArrayList<Personaje> getListaJugadores() {
