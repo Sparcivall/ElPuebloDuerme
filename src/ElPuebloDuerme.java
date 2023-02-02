@@ -108,6 +108,8 @@ public class ElPuebloDuerme {
 							.indexOf(getPersonaje(comando))]++;
 					System.out.println("UN ALDEANO HA VOTADO");
 					return "Has votado a " + comando;
+				case LOBO:
+					return "Observas como los humanos votan";
 				case BRUJA :
 
 					return "";
@@ -152,13 +154,13 @@ public class ElPuebloDuerme {
 		}
 	}
 
-	synchronized public void esperarAlResto(int votosNecesarioMenos) throws InterruptedException {
+	synchronized public void esperarAlResto() throws InterruptedException {
 		numeroVotos++;
-		System.out.println("Votos= "+numeroVotos+" "+(listaPersonajesVivos.size()-votosNecesarioMenos));
+		System.out.println("Votos= "+numeroVotos+" "+(listaPersonajesVivos.size()));
 		for(Personaje p:listaPersonajesVivos){
 			System.out.println(p);
 		}
-		if (numeroVotos == listaPersonajesVivos.size()-votosNecesarioMenos) {
+		if (numeroVotos == listaPersonajesVivos.size()) {
 			this.despertarHilos();
 			numeroVotos = 0;
 		} else {

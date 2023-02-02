@@ -74,7 +74,7 @@ public class HiloJuego extends Thread {
 					}
 				}
 
-				pueblo.esperarAlResto(0);
+				pueblo.esperarAlResto();
 
 				Thread.sleep(1000);
 
@@ -92,15 +92,16 @@ public class HiloJuego extends Thread {
 
 				output.println(pueblo.getPreguntaPersonaje(personaje.getRol()));
 
+				String comando="";
 				boolean errorComando = false;
 				while (true) {
 
-					if(personaje.getRol()==Rol.LOBO){break;}
-
-					String comando = input.readLine();
+					if(personaje.getRol()!=Rol.LOBO){
+						comando = input.readLine();
+					}
 
 					if (errorComando == false) {
-						pueblo.esperarAlResto(0);
+						pueblo.esperarAlResto();
 					}
 
 					String mensajeAccion = pueblo.accionPersonaje(this.personaje, comando);
@@ -113,8 +114,8 @@ public class HiloJuego extends Thread {
 						errorComando = true;
 					}
 				}
-
-				pueblo.esperarAlResto(0);
+				// El programa se raya pq el lobo esta en este metodo y los personajes en el otro
+				pueblo.esperarAlResto();
 
 				if (pueblo.purgarPersonaje(personaje)) {
 					output.println("UN JUGADOR TE HA ASESINADO!");
