@@ -59,34 +59,33 @@ public class HiloJuego extends Thread {
 
 				Thread.sleep(500);
 
-				// Imprime la pregunta que el servidor le hace a cada personaje
 				output.println(pueblo.getPreguntaPersonaje(personaje.getRol()));
 
-				String comando;
+				boolean errorComando = false;
 				while (true) {
-					comando = input.readLine();
-					if (comando.equals(nombreJugador)) {
-						output.println("No puedes elegirte a ti mismo!");
-					} else {
+
+					String comando = input.readLine();
+
+					if (errorComando == false) {
+						pueblo.esperarAlResto();
+					}
+
+					String mensajeAccion = pueblo
+							.accionPersonaje(this.personaje, comando);
+
+					output.println(mensajeAccion);
+
+					if (!mensajeAccion.contains("ERROR")) {
 						break;
+					} else {
+						errorComando = true;
 					}
 				}
 
-				if (comando.equals("fin")) {
-					break;
-				}
-
-				pueblo.esperarAlRestoVotos();// hace que cada hilo espere a que
-												// el resto acabe de votar
-
-				pueblo.accionPersonaje(personaje.getRol(), comando);
 				// ANTES DE SEGUIR: RECORDAR QUE POR LA MAÑANA SON LAS
 				// VOTACIONES Y POR LA NOCHE MATA EL LOBO
 
-				pueblo.esperarAlRestoVotos();
-				// creo que es necesario que esperen al resto en este punto, si
-				// no van a imprimir la lista de jugadores no actualizada, hacer
-				// varias pruebas y quizas probar un join()
+				pueblo.esperarAlResto();
 
 				if (pueblo.purgarPersonaje(personaje)) {
 					output.println("UN JUGADOR TE HA ASESINADO!");

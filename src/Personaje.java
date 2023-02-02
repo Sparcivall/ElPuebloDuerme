@@ -20,7 +20,10 @@ public class Personaje {
 
 	@Override
 	public String toString() {
-		return nombreJugador + " " + rol;// quitar de aqui el rol
+		if (estaVivo) {
+			return nombreJugador + " { VIVO } \t\t" + rol;
+		}
+		return nombreJugador + " { MUERTO } \t\t" + rol;
 	}
 
 	public void morir() {
