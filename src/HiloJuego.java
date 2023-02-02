@@ -57,21 +57,53 @@ public class HiloJuego extends Thread {
 
 				imprimirListaJugadores();
 
-				Thread.sleep(500);
+				Thread.sleep(1000);
+
+				output.println("Se hace de noche...");
+
+				if(personaje.getRol()==Rol.LOBO){
+					output.println("Escribe el nombre del jugador al que quieras matar");
+					while(true) {
+						String comando = input.readLine();
+						if (pueblo.ataqueLobo(personaje, comando)) {
+							output.println("Te has comido a " + comando);
+							break;
+						}else{
+							output.println("No puedes matarte a ti mismo ni a jugadores ya muertos.");
+						}
+					}
+				}
+
+				pueblo.esperarAlResto(0);
+
+				Thread.sleep(1000);
+
+				output.println("Se ha hecho de dia!!!\nPero por la noche algo se movio entre las sombras...");
+
+				// PURGAMOS AL PERSONAJE QUE HAYA MATADO EL LOBO
+				if (pueblo.purgarPersonaje(personaje)) {
+					output.println("UN JUGADOR TE HA ASESINADO!");
+					break;
+				}
+
+				Thread.sleep(1000);
+
+				imprimirListaJugadores();
 
 				output.println(pueblo.getPreguntaPersonaje(personaje.getRol()));
 
 				boolean errorComando = false;
 				while (true) {
 
+					if(personaje.getRol()==Rol.LOBO){break;}
+
 					String comando = input.readLine();
 
 					if (errorComando == false) {
-						pueblo.esperarAlResto();
+						pueblo.esperarAlResto(0);
 					}
 
-					String mensajeAccion = pueblo
-							.accionPersonaje(this.personaje, comando);
+					String mensajeAccion = pueblo.accionPersonaje(this.personaje, comando);
 
 					output.println(mensajeAccion);
 
@@ -82,10 +114,7 @@ public class HiloJuego extends Thread {
 					}
 				}
 
-				// ANTES DE SEGUIR: RECORDAR QUE POR LA MAÑANA SON LAS
-				// VOTACIONES Y POR LA NOCHE MATA EL LOBO
-
-				pueblo.esperarAlResto();
+				pueblo.esperarAlResto(0);
 
 				if (pueblo.purgarPersonaje(personaje)) {
 					output.println("UN JUGADOR TE HA ASESINADO!");

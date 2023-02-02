@@ -83,6 +83,17 @@ public class ElPuebloDuerme {
 		return false;
 	}
 
+	public boolean ataqueLobo(Personaje p, String comando){
+		if (p.getNombreJugador().equals(comando)) {
+			return false;
+		}
+		if (getPersonaje(comando).estaVivo()) {
+			getPersonaje(comando).morir();
+			return true;
+		}
+		return false;
+	}
+
 	synchronized public String accionPersonaje(Personaje p, String comando) {
 		try {
 			if (p.getNombreJugador().equals(comando)) {
@@ -97,13 +108,6 @@ public class ElPuebloDuerme {
 							.indexOf(getPersonaje(comando))]++;
 					System.out.println("UN ALDEANO HA VOTADO");
 					return "Has votado a " + comando;
-				case LOBO :
-					if (getPersonaje(comando).estaVivo()) {
-						getPersonaje(comando).morir();
-						return "Has matado a " + comando;
-					}
-					return "ERROR: No puedes matar a " + comando
-							+ " porque ya esta muerto";
 				case BRUJA :
 
 					return "";
@@ -134,7 +138,7 @@ public class ElPuebloDuerme {
 			case ALDEANO :
 				return ("¿ A quien votas para echar del pueblo ?");
 			case LOBO :
-				return ("¿ A quien quieres comerte ?");
+				return ("Es de dia, no puedes hacer nada.");
 			case BRUJA :
 				return ("Revive o mata a quien quieras");
 			case CURA :
@@ -148,10 +152,13 @@ public class ElPuebloDuerme {
 		}
 	}
 
-	synchronized public void esperarAlResto() throws InterruptedException {
+	synchronized public void esperarAlResto(int votosNecesarioMenos) throws InterruptedException {
 		numeroVotos++;
-
-		if (numeroVotos == listaPersonajesVivos.size()) {
+		System.out.println("Votos= "+numeroVotos+" "+(listaPersonajesVivos.size()-votosNecesarioMenos));
+		for(Personaje p:listaPersonajesVivos){
+			System.out.println(p);
+		}
+		if (numeroVotos == listaPersonajesVivos.size()-votosNecesarioMenos) {
 			this.despertarHilos();
 			numeroVotos = 0;
 		} else {
