@@ -134,8 +134,7 @@ public class ElPuebloDuerme {
 			case ALDEANO :
 				return ("¿ A quien votas para echar del pueblo ?");
 			case LOBO :
-				return ("1) ¿ A quien votas para echar del pueblo ?"
-						+ "\n2) ¿ A que persona quieres matar ?");
+				return ("¿ A quien quieres comerte ?");
 			case BRUJA :
 				return ("Revive o mata a quien quieras");
 			case CURA :
