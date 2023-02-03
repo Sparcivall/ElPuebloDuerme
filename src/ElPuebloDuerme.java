@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 public class ElPuebloDuerme {
 
@@ -19,6 +21,7 @@ public class ElPuebloDuerme {
 	@SuppressWarnings("unchecked")
 	public void replicarListaVivos() {
 		listaPersonajesVivos = (ArrayList<Personaje>) listaPersonajes.clone();
+		this.votos = new int[listaPersonajesVivos.size()];
 	}
 
 	public void asignarRoles() {
@@ -94,30 +97,36 @@ public class ElPuebloDuerme {
 		return false;
 	}
 
+	// TIENE QUE SER SYNCHRONIZED??
+	public boolean comprobarFinPartida(){
+		boolean hayLobo=false;
+		for(Personaje p:listaPersonajesVivos){
+			if(p.getRol()==Rol.LOBO){
+				hayLobo=true;
+				break;
+			}
+		}
+		return (!hayLobo || listaPersonajesVivos.size()<=2);
+	}
+
 	synchronized public String accionPersonaje(Personaje p, String comando) {
 		try {
 			if (p.getNombreJugador().equals(comando)) {
 				return "ERROR: No puedes realizar ninguna acción en ti mismo";
 			}
 
-			this.votos = new int[listaPersonajesVivos.size()];
-
 			switch (p.getRol()) {
 				case ALDEANO :
-					votos[listaPersonajesVivos
-							.indexOf(getPersonaje(comando))]++;
+					votos[listaPersonajesVivos.indexOf(getPersonaje(comando))]++;
 					System.out.println("UN ALDEANO HA VOTADO");
 					return "Has votado a " + comando;
 				case LOBO:
 					return "Observas como los humanos votan";
 				case BRUJA :
-
 					return "";
 				case CURA :
-
 					return "";
 				case ALCALDE :
-
 					return "";
 				case GUARDIAN :
 					return "";
@@ -129,6 +138,31 @@ public class ElPuebloDuerme {
 		} catch (IndexOutOfBoundsException e) {
 			return "ERROR: La persona a la que quieres votar no está en el pueblo";
 		}
+	}
+
+	public void eliminarJugadorMasVotado(){
+
+		int indice=0;
+		int maximoVotos=0;
+		boolean empate=false;
+		for(int i=0;i<votos.length;i++){
+			if(votos[i]>maximoVotos) {
+				maximoVotos = votos[i];
+				indice=i;
+				empate=false;
+			}else if(votos[i]==maximoVotos){
+				empate=true;
+			}
+		}
+
+		if(empate){
+			System.out.println("Empate en los votos");
+		}else{
+			System.out.println("El jugador mas votado es= "+listaPersonajesVivos.get(indice));
+			listaPersonajesVivos.get(indice).morir();
+		}
+
+		this.votos = new int[listaPersonajesVivos.size()];
 	}
 
 	public ArrayList<Personaje> getListaJugadores() {

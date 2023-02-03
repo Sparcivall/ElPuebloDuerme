@@ -45,19 +45,16 @@ public class HiloJuego extends Thread {
 
 			output.println("Tu personaje ha sido registrado!");
 
-			System.out.println(Thread.currentThread().getName()
-					+ " se va a dormir esperando al notify()");
+			System.out.println(Thread.currentThread().getName() + " se va a dormir esperando al notify()");
+
 			pueblo.esperarComienzo();
 
 			// EMPIEZA LA PARTIDA
 
 			while (true) {
 
-				Thread.sleep(100);
-
 				imprimirListaJugadores();
-
-				Thread.sleep(1000);
+				Thread.sleep(2000);
 
 				output.println("Se hace de noche...");
 
@@ -75,33 +72,24 @@ public class HiloJuego extends Thread {
 				}
 
 				pueblo.esperarAlResto();
-
 				Thread.sleep(1000);
 
 				output.println("Se ha hecho de dia!!!\nPero por la noche algo se movio entre las sombras...");
 
 				// PURGAMOS AL PERSONAJE QUE HAYA MATADO EL LOBO
-				if (pueblo.purgarPersonaje(personaje)) {
-					output.println("UN JUGADOR TE HA ASESINADO!");
-					break;
-				}
+				if (pueblo.purgarPersonaje(personaje)) {output.println("UN JUGADOR TE HA ASESINADO!");break;}
 
 				Thread.sleep(1000);
-
+				if(pueblo.comprobarFinPartida()){output.println("FIN DE LA PARTIDA. EL LOBO GANA");break;}
 				imprimirListaJugadores();
 
 				output.println(pueblo.getPreguntaPersonaje(personaje.getRol()));
 
 				String comando="";
-				boolean errorComando = false;
 				while (true) {
 
 					if(personaje.getRol()!=Rol.LOBO){
 						comando = input.readLine();
-					}
-
-					if (errorComando == false) {
-						pueblo.esperarAlResto();
 					}
 
 					String mensajeAccion = pueblo.accionPersonaje(this.personaje, comando);
@@ -110,17 +98,17 @@ public class HiloJuego extends Thread {
 
 					if (!mensajeAccion.contains("ERROR")) {
 						break;
-					} else {
-						errorComando = true;
 					}
 				}
-				// El programa se raya pq el lobo esta en este metodo y los personajes en el otro
+				pueblo.esperarAlResto(); //esta bien asi???
+
+				pueblo.eliminarJugadorMasVotado();
+
 				pueblo.esperarAlResto();
 
-				if (pueblo.purgarPersonaje(personaje)) {
-					output.println("UN JUGADOR TE HA ASESINADO!");
-					break;
-				}
+				if (pueblo.purgarPersonaje(personaje)) {output.println("UN JUGADOR TE HA ASESINADO!");break;}
+				Thread.sleep(1000);
+				if(pueblo.comprobarFinPartida()){output.println("FIN DE LA PARTIDA. EL LOBO GANA");break;}
 			}
 
 			// FIN DE LA PARTIDA
