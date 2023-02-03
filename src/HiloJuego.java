@@ -100,12 +100,13 @@ public class HiloJuego extends Thread {
 						break;
 					}
 				}
-				pueblo.esperarAlResto(); //esta bien asi???
+				pueblo.esperarAlResto(); //esta bien asi??? si
 
 				pueblo.eliminarJugadorMasVotado();
+				// este metodo deberia ejecutarse solo una vez
 
 				pueblo.esperarAlResto();
-
+				// comprobar fin partida podria ir dentro de purgar
 				if (pueblo.purgarPersonaje(personaje)) {output.println("UN JUGADOR TE HA ASESINADO!");break;}
 				Thread.sleep(1000);
 				if(pueblo.comprobarFinPartida()){output.println("FIN DE LA PARTIDA. EL LOBO GANA");break;}
