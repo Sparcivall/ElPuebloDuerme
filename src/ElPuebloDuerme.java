@@ -77,8 +77,7 @@ public class ElPuebloDuerme {
 		return null;
 	}
 
-	public boolean purgarPersonaje(Personaje p) {
-
+	public boolean purgarPersonaje(Personaje p) throws InterruptedException{
 		if (!p.estaVivo()) {
 			listaPersonajesVivos.remove(listaPersonajesVivos.indexOf(p));
 			return true;
@@ -97,8 +96,7 @@ public class ElPuebloDuerme {
 		return false;
 	}
 
-	// TIENE QUE SER SYNCHRONIZED??
-	public boolean comprobarFinPartida(){
+	public String comprobarFinPartida(){
 		boolean hayLobo=false;
 		for(Personaje p:listaPersonajesVivos){
 			if(p.getRol()==Rol.LOBO){
@@ -106,7 +104,12 @@ public class ElPuebloDuerme {
 				break;
 			}
 		}
-		return (!hayLobo || listaPersonajesVivos.size()<=2);
+		if(!hayLobo){
+			return "loboMuerto";
+		}else if(listaPersonajesVivos.size()<=2){
+			return "ganaLobo";
+		}
+		return "";
 	}
 
 	synchronized public String accionPersonaje(Personaje p, String comando) {
@@ -190,7 +193,7 @@ public class ElPuebloDuerme {
 
 	synchronized public void esperarAlResto() throws InterruptedException {
 		numeroVotos++;
-		System.out.println("Votos= "+numeroVotos+" "+(listaPersonajesVivos.size()));
+		System.out.println("Personajes esperando= "+numeroVotos+"/"+(listaPersonajesVivos.size()));
 		for(Personaje p:listaPersonajesVivos){
 			System.out.println(p);
 		}

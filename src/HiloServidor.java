@@ -8,9 +8,6 @@ public class HiloServidor extends Thread {
 
 	private ServerSocket servidor;
 
-	private BufferedReader input;
-	private PrintWriter output;
-
 	private ElPuebloDuerme elPuebloDuerme;
 
 	public HiloServidor(ServerSocket servidor) {
@@ -28,8 +25,7 @@ public class HiloServidor extends Thread {
 
 				Socket socketServidor = new Socket();
 
-				socketServidor = this.servidor.accept();// esperando a un
-														// cliente
+				socketServidor = this.servidor.accept();// esperando a un cliente
 
 				HiloJuego hilo = new HiloJuego(socketServidor, elPuebloDuerme);
 

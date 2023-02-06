@@ -76,11 +76,8 @@ public class HiloJuego extends Thread {
 
 				output.println("Se ha hecho de dia!!!\nPero por la noche algo se movio entre las sombras...");
 
-				// PURGAMOS AL PERSONAJE QUE HAYA MATADO EL LOBO
-				if (pueblo.purgarPersonaje(personaje)) {output.println("UN JUGADOR TE HA ASESINADO!");break;}
+				if(comprobarMuertePartida()){break;}
 
-				Thread.sleep(1000);
-				if(pueblo.comprobarFinPartida()){output.println("FIN DE LA PARTIDA. EL LOBO GANA");break;}
 				imprimirListaJugadores();
 
 				output.println(pueblo.getPreguntaPersonaje(personaje.getRol()));
@@ -100,16 +97,13 @@ public class HiloJuego extends Thread {
 						break;
 					}
 				}
-				pueblo.esperarAlResto(); //esta bien asi??? si
+				pueblo.esperarAlResto();
 
-				pueblo.eliminarJugadorMasVotado();
-				// este metodo deberia ejecutarse solo una vez
+				pueblo.eliminarJugadorMasVotado();// este metodo deberia ejecutarse solo una vez
 
 				pueblo.esperarAlResto();
-				// comprobar fin partida podria ir dentro de purgar
-				if (pueblo.purgarPersonaje(personaje)) {output.println("UN JUGADOR TE HA ASESINADO!");break;}
-				Thread.sleep(1000);
-				if(pueblo.comprobarFinPartida()){output.println("FIN DE LA PARTIDA. EL LOBO GANA");break;}
+
+				if(comprobarMuertePartida()){break;}
 			}
 
 			// FIN DE LA PARTIDA
@@ -131,6 +125,25 @@ public class HiloJuego extends Thread {
 		for (Personaje p : pueblo.getListaJugadores()) {
 			output.println(p);
 		}
+	}
+
+	private boolean comprobarMuertePartida() throws InterruptedException{
+		// Purgamos al jugador
+		if (pueblo.purgarPersonaje(personaje)) {
+			output.println("UN JUGADOR TE HA ASESINADO!");
+			return true;
+		}
+
+		Thread.sleep(1000);
+
+		if(pueblo.comprobarFinPartida().equals("loboMuerto")){
+			output.println("EL LOBO HA MUERTO!");
+			return true;
+		}else if(pueblo.comprobarFinPartida().equals("ganaLobo")){
+			output.println("EL LOBO SE HA QUEDADO SOLO CON OTRO JUGADOR Y SE LO HA COMIDO");
+			return true;
+		}
+		return false;
 	}
 
 }
