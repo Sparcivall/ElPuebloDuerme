@@ -114,9 +114,7 @@ public class HiloJuego extends Thread {
 			input.close();
 			socketServidor.close();
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -145,5 +143,4 @@ public class HiloJuego extends Thread {
 		}
 		return false;
 	}
-
 }

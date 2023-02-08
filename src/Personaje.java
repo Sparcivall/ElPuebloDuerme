@@ -37,4 +37,8 @@ public class Personaje {
 	public String getNombreJugador() {
 		return this.nombreJugador;
 	}
+
+	public void revivir(){
+		this.estaVivo=true;
+	}
 }

@@ -114,19 +114,38 @@ public class ElPuebloDuerme {
 
 	synchronized public String accionPersonaje(Personaje p, String comando) {
 		try {
-			if (p.getNombreJugador().equals(comando)) {
-				return "ERROR: No puedes realizar ninguna acción en ti mismo";
+			String nombreJugadorVoto=comando;
+			String nombreJugadorAccion="";
+
+			if(comando.contains("/")){
+				nombreJugadorVoto=comando.substring(0,comando.indexOf('/'));
+				nombreJugadorAccion=comando.substring(comando.indexOf('/')+1);
+			}
+
+			if (p.getNombreJugador().equals(nombreJugadorVoto) || p.getNombreJugador().equals(nombreJugadorAccion)) {
+				return "ERROR: No puedes votarte ni realizar acciones sobre ti mismo";
 			}
 
 			switch (p.getRol()) {
 				case ALDEANO :
-					votos[listaPersonajesVivos.indexOf(getPersonaje(comando))]++;
+					votos[listaPersonajesVivos.indexOf(getPersonaje(nombreJugadorVoto))]++;
 					System.out.println("UN ALDEANO HA VOTADO");
-					return "Has votado a " + comando;
+					return "Has votado a " + nombreJugadorVoto;
 				case LOBO:
 					return "Observas como los humanos votan";
 				case BRUJA :
-					return "";
+					System.out.println(nombreJugadorVoto);
+					System.out.println(nombreJugadorAccion);
+					votos[listaPersonajesVivos.indexOf(getPersonaje(nombreJugadorVoto))]++;
+					if(getPersonaje(nombreJugadorAccion)==null){
+						System.out.println("UNA BRUJA HA VOTADO");
+						return "Has votado a " + nombreJugadorVoto;
+					}else if(getPersonaje(nombreJugadorAccion).estaVivo()){
+						getPersonaje(nombreJugadorAccion).morir();
+					}else{// CUANDO EL JUGADOR MUERE NO HAY QUE CERRAR SU SOCKET
+						getPersonaje(nombreJugadorAccion).revivir();
+						listaPersonajesVivos.add(getPersonaje(nombreJugadorAccion));
+					}
 				case CURA :
 					return "";
 				case ALCALDE :
