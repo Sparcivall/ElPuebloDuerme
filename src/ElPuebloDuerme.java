@@ -134,17 +134,17 @@ public class ElPuebloDuerme {
 				case LOBO:
 					return "Observas como los humanos votan";
 				case BRUJA :
-					System.out.println(nombreJugadorVoto);
-					System.out.println(nombreJugadorAccion);
 					votos[listaPersonajesVivos.indexOf(getPersonaje(nombreJugadorVoto))]++;
+					System.out.println("UNA BRUJA HA VOTADO");
 					if(getPersonaje(nombreJugadorAccion)==null){
-						System.out.println("UNA BRUJA HA VOTADO");
 						return "Has votado a " + nombreJugadorVoto;
 					}else if(getPersonaje(nombreJugadorAccion).estaVivo()){
 						getPersonaje(nombreJugadorAccion).morir();
+						return "Has matado a " + nombreJugadorAccion;
 					}else{// CUANDO EL JUGADOR MUERE NO HAY QUE CERRAR SU SOCKET
 						getPersonaje(nombreJugadorAccion).revivir();
 						listaPersonajesVivos.add(getPersonaje(nombreJugadorAccion));
+						return "Has revivido a " + nombreJugadorAccion;
 					}
 				case CURA :
 					return "";
