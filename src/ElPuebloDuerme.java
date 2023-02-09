@@ -1,10 +1,8 @@
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.NoSuchElementException;
 
 public class ElPuebloDuerme {
 
-	private ArrayList<Personaje> listaPersonajes;
+	private final ArrayList<Personaje> listaPersonajes;
 	private ArrayList<Personaje> listaPersonajesVivos;
 	private int[] votos;
 
@@ -29,30 +27,16 @@ public class ElPuebloDuerme {
 			p.asignarRol(Rol.ALDEANO);
 		}
 
-		if (listaPersonajes.size() > 2) {
-			asignarRol(Rol.LOBO);
-		}
-
-		if (listaPersonajes.size() > 4) {// BRUJA
-			asignarRol(Rol.BRUJA);
-		}
-
-		if (listaPersonajes.size() > 5) {// CURA
-			asignarRol(Rol.CURA);
-		}
-
-		if (listaPersonajes.size() > 6) {// GUARDIAN
-			asignarRol(Rol.GUARDIAN);
-		}
-
-		if (listaPersonajes.size() > 7) {// ALCALDE
-			asignarRol(Rol.ALCALDE);
-		}
+		if (listaPersonajes.size() > 2) {asignarRol(Rol.LOBO);}
+		if (listaPersonajes.size() > 4) {asignarRol(Rol.BRUJA);}// BRUJA
+		if (listaPersonajes.size() > 5) {asignarRol(Rol.CURA);}// CURA
+		if (listaPersonajes.size() > 6) {asignarRol(Rol.GUARDIAN);}// GUARDIAN
+		if (listaPersonajes.size() > 7) {asignarRol(Rol.ALCALDE);}// ALCALDE
 	}
 
 	private void asignarRol(Rol rol) {
 		int indiceAleatorio = (int) Math.floor(
-				Math.random() * ((getAldeanos().size() - 1) - 0 + 1) + 0);
+				Math.random() * ((getAldeanos().size() - 1) + 1) + 0);
 		getAldeanos().get(indiceAleatorio).asignarRol(rol);
 	}
 
@@ -77,9 +61,9 @@ public class ElPuebloDuerme {
 		return null;
 	}
 
-	public boolean purgarPersonaje(Personaje p) throws InterruptedException{
+	public boolean purgarPersonaje(Personaje p){
 		if (!p.estaVivo()) {
-			listaPersonajesVivos.remove(listaPersonajesVivos.indexOf(p));
+			listaPersonajesVivos.remove(p);
 			return true;
 		}
 		return false;
@@ -127,33 +111,30 @@ public class ElPuebloDuerme {
 			}
 
 			switch (p.getRol()) {
-				case ALDEANO :
+				case ALDEANO -> {
 					votos[listaPersonajesVivos.indexOf(getPersonaje(nombreJugadorVoto))]++;
 					System.out.println("UN ALDEANO HA VOTADO");
 					return "Has votado a " + nombreJugadorVoto;
-				case LOBO:
-					return "Observas como los humanos votan";
-				case BRUJA :
+				}
+				case LOBO -> {return "Observas como los humanos votan";}
+				case BRUJA -> {
 					votos[listaPersonajesVivos.indexOf(getPersonaje(nombreJugadorVoto))]++;
 					System.out.println("UNA BRUJA HA VOTADO");
-					if(getPersonaje(nombreJugadorAccion)==null){
+					if (getPersonaje(nombreJugadorAccion) == null) {
 						return "Has votado a " + nombreJugadorVoto;
-					}else if(getPersonaje(nombreJugadorAccion).estaVivo()){
+					} else if (getPersonaje(nombreJugadorAccion).estaVivo()) {
 						getPersonaje(nombreJugadorAccion).morir();
 						return "Vas a matar a " + nombreJugadorAccion;
-					}else{// CUANDO EL JUGADOR MUERE NO HAY QUE CERRAR SU SOCKET
+					} else {// CUANDO EL JUGADOR MUERE NO HAY QUE CERRAR SU SOCKET
 						getPersonaje(nombreJugadorAccion).revivir();
 						listaPersonajesVivos.add(getPersonaje(nombreJugadorAccion));
 						return "Has revivido a " + nombreJugadorAccion;
 					}
-				case CURA :
-					return "";
-				case ALCALDE :
-					return "";
-				case GUARDIAN :
-					return "";
-				default :
-					return "ERROR: ESTE PERSONAJE NO TIEN UN ROL";
+				}
+				case CURA -> {return "";}
+				case ALCALDE -> {return "";}
+				case GUARDIAN -> {return "";}
+				default -> {return "ERROR: ESTE PERSONAJE NO TIEN UN ROL";}
 			}
 		} catch (NullPointerException e) {
 			return "ERROR: La persona que quieres matar no está en el pueblo";
@@ -192,30 +173,19 @@ public class ElPuebloDuerme {
 	}
 
 	public String getPreguntaPersonaje(Rol rol) {
-		switch (rol) {
-			case ALDEANO :
-				return ("¿ A quien votas para echar del pueblo ?");
-			case LOBO :
-				return ("Es de dia, no puedes hacer nada.");
-			case BRUJA :
-				return ("Revive o mata a quien quieras");
-			case CURA :
-				return ("¿A quien echas agua bendita? (Si te equivocas moriras)");
-			case ALCALDE :
-				return ("¿A quien votas para echar del pueblo? (Una vez puedes votar doble)");
-			case GUARDIAN :
-				return ("¿A quien quieres proteger? (Una vez puedes hacerlo dos veces)");
-			default :
-				return ("ERROR, ESTE PERSONAJE NO TIEN UN ROL");
-		}
+		return switch (rol) {
+			case ALDEANO -> ("¿ A quien votas para echar del pueblo ?");
+			case LOBO -> ("Es de dia, no puedes hacer nada.");
+			case BRUJA -> ("Revive o mata a quien quieras");
+			case CURA -> ("¿A quien echas agua bendita? (Si te equivocas moriras)");
+			case ALCALDE -> ("¿A quien votas para echar del pueblo? (Una vez puedes votar doble)");
+			case GUARDIAN -> ("¿A quien quieres proteger? (Una vez puedes hacerlo dos veces)");
+		};
 	}
 
 	synchronized public void esperarAlResto(String mensaje) throws InterruptedException {
 		numeroVotos++;
 		System.out.println(mensaje+", esperando= "+numeroVotos+"/"+(listaPersonajes.size()));
-		//for(Personaje p:listaPersonajes){
-		//	System.out.println(p);
-		//}
 		if (numeroVotos == listaPersonajes.size()) {
 			this.despertarHilos();
 			numeroVotos = 0;
@@ -232,5 +202,4 @@ public class ElPuebloDuerme {
 	synchronized public void despertarHilos() {
 		notifyAll();
 	}
-
 }
