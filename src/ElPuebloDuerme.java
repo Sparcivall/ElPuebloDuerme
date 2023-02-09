@@ -48,7 +48,6 @@ public class ElPuebloDuerme {
 				listaAldeanos.add(p);
 			}
 		}
-
 		return listaAldeanos;
 	}
 
@@ -176,10 +175,10 @@ public class ElPuebloDuerme {
 		return switch (rol) {
 			case ALDEANO -> ("¿ A quien votas para echar del pueblo ?");
 			case LOBO -> ("Es de dia, no puedes hacer nada.");
-			case BRUJA -> ("Revive o mata a quien quieras");
-			case CURA -> ("¿A quien echas agua bendita? (Si te equivocas moriras)");
-			case ALCALDE -> ("¿A quien votas para echar del pueblo? (Una vez puedes votar doble)");
-			case GUARDIAN -> ("¿A quien quieres proteger? (Una vez puedes hacerlo dos veces)");
+			case BRUJA -> ("Vota y elige a otro jugador para matarlo o revivirlo. <nombreVoto>/<nombreAccion>");
+			case CURA -> ("Vota y intenta averiguar quien es el lobo, si te equivocas morirás. <nombreVoto>/<nombreAccion>");
+			case ALCALDE -> ("Vota una vez o dos veces, pero dos solo una vez por partida. <nombreVoto>/<nombreVoto>");
+			case GUARDIAN -> ("Vota y elige a quien quieres proteger, no puedes repetir persona. <nombreVoto>/<nombreAccion>");
 		};
 	}
 
