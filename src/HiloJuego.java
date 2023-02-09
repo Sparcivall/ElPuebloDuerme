@@ -129,7 +129,9 @@ public class HiloJuego extends Thread {
 		}
 		pueblo.esperarAlResto(personaje.getNombreJugador()+" esperando en wait post accion");
 
-		pueblo.eliminarJugadorMasVotado();
+		// INTENTO DE QUE SE EJECUTE SOLO UNA VEZ
+		if(personaje.getRol()==Rol.LOBO){pueblo.eliminarJugadorMasVotado();}
+		Thread.sleep(500);
 
 		return comprobarMuertePartida();
 	}
