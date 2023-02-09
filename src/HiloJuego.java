@@ -115,12 +115,9 @@ public class HiloJuego extends Thread {
 
 		output.println(pueblo.getPreguntaPersonaje(personaje.getRol()));
 
-		String comando="";
-		while (true) {
+		while (personaje.getRol()!=Rol.LOBO) {
 
-			if(personaje.getRol()!=Rol.LOBO){
-				comando = input.readLine();
-			}
+			String comando = input.readLine();
 
 			String mensajeAccion = pueblo.accionPersonaje(this.personaje, comando);
 
