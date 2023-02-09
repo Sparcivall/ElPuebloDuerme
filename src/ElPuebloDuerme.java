@@ -32,8 +32,8 @@ public class ElPuebloDuerme {
 		if (listaPersonajes.size() > 2) {asignarRol(Rol.LOBO);}
 		if (listaPersonajes.size() > 4) {asignarRol(Rol.BRUJA);}
 		if (listaPersonajes.size() > 5) {asignarRol(Rol.CURA);}
-		if (listaPersonajes.size() > 6) {asignarRol(Rol.GUARDIAN);}
-		if (listaPersonajes.size() > 7) {asignarRol(Rol.ALCALDE);}
+		if (listaPersonajes.size() > 6) {asignarRol(Rol.ALCALDE);}
+		if (listaPersonajes.size() > 7) {asignarRol(Rol.GUARDIAN);}
 	}
 
 	private void asignarRol(Rol rol) {
