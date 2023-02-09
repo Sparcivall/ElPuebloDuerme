@@ -129,9 +129,7 @@ public class HiloJuego extends Thread {
 		}
 		pueblo.esperarAlResto(personaje.getNombreJugador()+" esperando en wait post accion");
 
-		pueblo.eliminarJugadorMasVotado();// este metodo deberia ejecutarse solo una vez
-
-		//pueblo.esperarAlResto(personaje.getNombreJugador()+" esperando en wait post votos");
+		pueblo.eliminarJugadorMasVotado();
 
 		return comprobarMuertePartida();
 	}

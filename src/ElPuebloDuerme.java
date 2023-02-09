@@ -8,6 +8,8 @@ public class ElPuebloDuerme {
 
 	private int numeroVotos = 0;
 
+	private boolean dobleVotoAlcalde=true;
+
 	public ElPuebloDuerme() {
 		this.listaPersonajes = new ArrayList<>();
 	}
@@ -143,7 +145,18 @@ public class ElPuebloDuerme {
 						return "Has lanzado agua bendita a un humano y has muerto por ello.";
 					}
 				}
-				case ALCALDE -> {return "";}
+				case ALCALDE -> {
+					System.out.println("UN ALCALDE HA VOTADO");
+					if (personajeAccion == null) {
+						return "Has votado a " + nombreJugadorVoto;
+					} else if (dobleVotoAlcalde) {
+						votos[listaPersonajesVivos.indexOf(personajeAccion)]++;
+						dobleVotoAlcalde=false;
+						return "Has usado tu voto doble!";
+					}else{
+						return "Has votado a " + nombreJugadorVoto+", pero yaa no dispones de tu voto doble...";
+					}
+				}
 				case GUARDIAN -> {return "";}
 				default -> {return "ERROR: ESTE PERSONAJE NO TIEN UN ROL";}
 			}
