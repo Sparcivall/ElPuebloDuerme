@@ -109,34 +109,34 @@ public class ElPuebloDuerme {
 				return "ERROR: No puedes votarte ni realizar acciones sobre ti mismo";
 			}
 
-			switch (p.getRol()) {
+			votos[listaPersonajesVivos.indexOf(getPersonaje(nombreJugadorVoto))]++;
+
+			Personaje personajeAccion=getPersonaje(nombreJugadorAccion);
+
+			switch (p.getRol()) {// FUNCIONAMIENTO DE CADA ROL.
 				case ALDEANO -> {
-					votos[listaPersonajesVivos.indexOf(getPersonaje(nombreJugadorVoto))]++;
 					System.out.println("UN ALDEANO HA VOTADO");
 					return "Has votado a " + nombreJugadorVoto;
 				}
-				case LOBO -> {return "Observas como los humanos votan";}
 				case BRUJA -> {
-					votos[listaPersonajesVivos.indexOf(getPersonaje(nombreJugadorVoto))]++;
 					System.out.println("UNA BRUJA HA VOTADO");
-					if (getPersonaje(nombreJugadorAccion) == null) {
+					if (personajeAccion == null) {
 						return "Has votado a " + nombreJugadorVoto;
-					} else if (getPersonaje(nombreJugadorAccion).estaVivo()) {
-						getPersonaje(nombreJugadorAccion).morir();
+					} else if (personajeAccion.estaVivo()) {
+						personajeAccion.morir();
 						return "Vas a matar a " + nombreJugadorAccion;
 					} else {
-						getPersonaje(nombreJugadorAccion).revivir();
-						listaPersonajesVivos.add(getPersonaje(nombreJugadorAccion));
+						personajeAccion.revivir();
+						listaPersonajesVivos.add(personajeAccion);
 						return "Has revivido a " + nombreJugadorAccion;
 					}
 				}
 				case CURA -> {
-					votos[listaPersonajesVivos.indexOf(getPersonaje(nombreJugadorVoto))]++;
 					System.out.println("UN CURA HA VOTADO");
-					if (getPersonaje(nombreJugadorAccion) == null) {
+					if (personajeAccion == null) {
 						return "Has votado a " + nombreJugadorVoto;
-					} else if (getPersonaje(nombreJugadorAccion).getRol()==Rol.LOBO) {
-						getPersonaje(nombreJugadorAccion).morir();
+					} else if (personajeAccion.getRol()==Rol.LOBO) {
+						personajeAccion.morir();
 						return "HAS CONSEGUIDO MATAR AL LOBO";
 					} else {
 						p.morir();
