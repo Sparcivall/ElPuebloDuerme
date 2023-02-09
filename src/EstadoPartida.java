@@ -1,0 +1,3 @@
+public enum EstadoPartida {
+    JUGADOR_MUERTO,PARTIDA_EN_EJECUCION,PARTIDA_ACABADA;
+}

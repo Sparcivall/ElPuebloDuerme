@@ -212,11 +212,11 @@ public class ElPuebloDuerme {
 
 	synchronized public void esperarAlResto() throws InterruptedException {
 		numeroVotos++;
-		System.out.println("Personajes esperando= "+numeroVotos+"/"+(listaPersonajesVivos.size()));
-		for(Personaje p:listaPersonajesVivos){
+		System.out.println("Personajes esperando= "+numeroVotos+"/"+(listaPersonajes.size()));
+		for(Personaje p:listaPersonajes){
 			System.out.println(p);
 		}
-		if (numeroVotos == listaPersonajesVivos.size()) {
+		if (numeroVotos == listaPersonajes.size()) {
 			this.despertarHilos();
 			numeroVotos = 0;
 		} else {
