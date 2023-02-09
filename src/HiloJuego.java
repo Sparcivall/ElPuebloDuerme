@@ -52,10 +52,19 @@ public class HiloJuego extends Thread {
 			while(true) {
 				if(personaje.estaVivo()) {
 					if(logicaPartida()==EstadoPartida.PARTIDA_ACABADA){
+						pueblo.despertarHilos();// si acaba la partida despierta a los hilos muertos
 						break;
 					}
 				}else{
 					pueblo.esperarAlResto(personaje.getNombreJugador()+" esperando en wait muerte");
+					String isFinDePartida=pueblo.comprobarFinPartida();
+					if(isFinDePartida.equals("loboMuerto")){
+						output.println("EL LOBO HA MUERTO!");
+						break;
+					}else if(isFinDePartida.equals("ganaLobo")){
+						output.println("EL LOBO SE HA QUEDADO SOLO CON OTRO JUGADOR Y SE LO HA COMIDO");
+						break;
+					}
 				}
 			}
 
@@ -145,10 +154,11 @@ public class HiloJuego extends Thread {
 
 		Thread.sleep(1000);
 
-		if(pueblo.comprobarFinPartida().equals("loboMuerto")){
+		String isFinDePartida=pueblo.comprobarFinPartida();
+		if(isFinDePartida.equals("loboMuerto")){
 			output.println("EL LOBO HA MUERTO!");
 			return EstadoPartida.PARTIDA_ACABADA;
-		}else if(pueblo.comprobarFinPartida().equals("ganaLobo")){
+		}else if(isFinDePartida.equals("ganaLobo")){
 			output.println("EL LOBO SE HA QUEDADO SOLO CON OTRO JUGADOR Y SE LO HA COMIDO");
 			return EstadoPartida.PARTIDA_ACABADA;
 		}
