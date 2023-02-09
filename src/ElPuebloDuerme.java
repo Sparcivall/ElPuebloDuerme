@@ -28,10 +28,10 @@ public class ElPuebloDuerme {
 		}
 
 		if (listaPersonajes.size() > 2) {asignarRol(Rol.LOBO);}
-		if (listaPersonajes.size() > 4) {asignarRol(Rol.BRUJA);}// BRUJA
-		if (listaPersonajes.size() > 5) {asignarRol(Rol.CURA);}// CURA
-		if (listaPersonajes.size() > 6) {asignarRol(Rol.GUARDIAN);}// GUARDIAN
-		if (listaPersonajes.size() > 7) {asignarRol(Rol.ALCALDE);}// ALCALDE
+		if (listaPersonajes.size() > 4) {asignarRol(Rol.BRUJA);}
+		if (listaPersonajes.size() > 5) {asignarRol(Rol.CURA);}
+		if (listaPersonajes.size() > 6) {asignarRol(Rol.GUARDIAN);}
+		if (listaPersonajes.size() > 7) {asignarRol(Rol.ALCALDE);}
 	}
 
 	private void asignarRol(Rol rol) {
@@ -124,13 +124,25 @@ public class ElPuebloDuerme {
 					} else if (getPersonaje(nombreJugadorAccion).estaVivo()) {
 						getPersonaje(nombreJugadorAccion).morir();
 						return "Vas a matar a " + nombreJugadorAccion;
-					} else {// CUANDO EL JUGADOR MUERE NO HAY QUE CERRAR SU SOCKET
+					} else {
 						getPersonaje(nombreJugadorAccion).revivir();
 						listaPersonajesVivos.add(getPersonaje(nombreJugadorAccion));
 						return "Has revivido a " + nombreJugadorAccion;
 					}
 				}
-				case CURA -> {return "";}
+				case CURA -> {
+					votos[listaPersonajesVivos.indexOf(getPersonaje(nombreJugadorVoto))]++;
+					System.out.println("UN CURA HA VOTADO");
+					if (getPersonaje(nombreJugadorAccion) == null) {
+						return "Has votado a " + nombreJugadorVoto;
+					} else if (getPersonaje(nombreJugadorAccion).getRol()==Rol.LOBO) {
+						getPersonaje(nombreJugadorAccion).morir();
+						return "HAS CONSEGUIDO MATAR AL LOBO";
+					} else {
+						p.morir();
+						return "Has lanzado agua bendita a un humano y has muerto por ello.";
+					}
+				}
 				case ALCALDE -> {return "";}
 				case GUARDIAN -> {return "";}
 				default -> {return "ERROR: ESTE PERSONAJE NO TIEN UN ROL";}
@@ -193,11 +205,7 @@ public class ElPuebloDuerme {
 		}
 	}
 
-	// HACER QUE LOS HILOS ESPEREN CON WAIT Y DESPERTARLOS CON NOTIFY
-	synchronized public void esperarComienzo() throws InterruptedException {
-		wait();
-	}
-
+	synchronized public void esperarComienzo() throws InterruptedException {wait();}
 	synchronized public void despertarHilos() {
 		notifyAll();
 	}
