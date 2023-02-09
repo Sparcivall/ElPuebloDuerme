@@ -210,12 +210,12 @@ public class ElPuebloDuerme {
 		}
 	}
 
-	synchronized public void esperarAlResto() throws InterruptedException {
+	synchronized public void esperarAlResto(String mensaje) throws InterruptedException {
 		numeroVotos++;
-		System.out.println("Personajes esperando= "+numeroVotos+"/"+(listaPersonajes.size()));
-		for(Personaje p:listaPersonajes){
-			System.out.println(p);
-		}
+		System.out.println(mensaje+", esperando= "+numeroVotos+"/"+(listaPersonajes.size()));
+		//for(Personaje p:listaPersonajes){
+		//	System.out.println(p);
+		//}
 		if (numeroVotos == listaPersonajes.size()) {
 			this.despertarHilos();
 			numeroVotos = 0;

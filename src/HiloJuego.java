@@ -19,11 +19,9 @@ public class HiloJuego extends Thread {
 
 		try {
 
-			this.output = new PrintWriter(socketServidor.getOutputStream(),
-					true);
+			this.output = new PrintWriter(socketServidor.getOutputStream(),true);
 
-			this.input = new BufferedReader(
-					new InputStreamReader(socketServidor.getInputStream()));
+			this.input = new BufferedReader(new InputStreamReader(socketServidor.getInputStream()));
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -57,7 +55,7 @@ public class HiloJuego extends Thread {
 						break;
 					}
 				}else{
-					pueblo.esperarAlResto();
+					pueblo.esperarAlResto(personaje.getNombreJugador()+" esperando en wait muerte");
 				}
 			}
 
@@ -94,7 +92,7 @@ public class HiloJuego extends Thread {
 			}
 		}
 
-		pueblo.esperarAlResto();
+		pueblo.esperarAlResto(personaje.getNombreJugador()+" esperando en wait ataqueLobo");
 		Thread.sleep(1000);
 
 		output.println("Se ha hecho de dia!!!\nPero por la noche algo se movio entre las sombras...");
@@ -123,11 +121,11 @@ public class HiloJuego extends Thread {
 				break;
 			}
 		}
-		pueblo.esperarAlResto();
+		pueblo.esperarAlResto(personaje.getNombreJugador()+" esperando en wait post accion");
 
 		pueblo.eliminarJugadorMasVotado();// este metodo deberia ejecutarse solo una vez
 
-		pueblo.esperarAlResto();
+		//pueblo.esperarAlResto(personaje.getNombreJugador()+" esperando en wait post votos");
 
 		return comprobarMuertePartida();
 	}
