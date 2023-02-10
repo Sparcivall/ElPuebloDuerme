@@ -90,7 +90,7 @@ public class HiloJuego extends Thread {
 					output.println("Te has comido a " + comando);
 					break;
 				}else{
-					output.println("Tienes que matar aun humano del pueblo que no este protegido por un guardian.");
+					output.println("Tienes que matar a un humano del pueblo que no este protegido por un guardian.");
 				}
 			}
 		}
