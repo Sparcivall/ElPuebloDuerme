@@ -4,6 +4,7 @@ public class ElPuebloDuerme {
 
 	private final ArrayList<Personaje> listaPersonajes;
 	private ArrayList<Personaje> listaPersonajesVivos;
+	private ArrayList<Personaje> personajesYaProtegidos;
 	private int[] votos;
 
 	private int numeroVotos = 0;
@@ -12,6 +13,7 @@ public class ElPuebloDuerme {
 
 	public ElPuebloDuerme() {
 		this.listaPersonajes = new ArrayList<>();
+		this.personajesYaProtegidos=new ArrayList<>();
 	}
 
 	public void anadirPersonaje(Personaje p) {
@@ -74,11 +76,16 @@ public class ElPuebloDuerme {
 		if (p.getNombreJugador().equals(comando)) {
 			return false;
 		}
-		if (getPersonaje(comando).estaVivo()) {
-			getPersonaje(comando).morir();
-			return true;
+		try {
+			Personaje personajeAccion = getPersonaje(comando);
+			if (personajeAccion.estaVivo() && !personajeAccion.estaProtegido()) {
+				personajeAccion.morir();
+				return true;
+			}
+			return false;
+		}catch(NullPointerException e){
+			return false;
 		}
-		return false;
 	}
 
 	public String comprobarFinPartida(){
@@ -125,6 +132,9 @@ public class ElPuebloDuerme {
 					if (personajeAccion == null) {
 						return "Has votado a " + nombreJugadorVoto;
 					} else if (personajeAccion.estaVivo()) {
+						if(personajeAccion.estaProtegido()){
+							return "No puedes matar a "+personajeAccion.getNombreJugador()+" porque esta protegido, pero has realizado tu voto.";
+						}
 						personajeAccion.morir();
 						return "Vas a matar a " + nombreJugadorAccion;
 					} else {
@@ -137,7 +147,9 @@ public class ElPuebloDuerme {
 					System.out.println("UN CURA HA VOTADO");
 					if (personajeAccion == null) {
 						return "Has votado a " + nombreJugadorVoto;
-					} else if (personajeAccion.getRol()==Rol.LOBO) {
+					}else if(personajeAccion.estaProtegido()){
+						return "No puedes matar a "+personajeAccion.getNombreJugador()+" porque esta protegido, pero has realizado tu voto.";
+					}else if (personajeAccion.getRol()==Rol.LOBO) {
 						personajeAccion.morir();
 						return "HAS CONSEGUIDO MATAR AL LOBO";
 					} else {
@@ -157,11 +169,20 @@ public class ElPuebloDuerme {
 						return "Has votado a " + nombreJugadorVoto+", pero yaa no dispones de tu voto doble...";
 					}
 				}
-				case GUARDIAN -> {return "";}
+				case GUARDIAN -> {
+					System.out.println("EL GUARDIAN HA VOTADO");
+					if(personajeAccion==null) {
+						return "Has votado a " + nombreJugadorVoto;
+					}else if(personajesYaProtegidos.contains(personajeAccion)){
+						return "Has votado a " + nombreJugadorVoto+", pero no puedes repetir protección.";
+					}else{
+						personajeAccion.proteger();
+						personajesYaProtegidos.add(personajeAccion);
+						return "Has protegido a "+personajeAccion.getNombreJugador();
+					}
+				}
 				default -> {return "ERROR: ESTE PERSONAJE NO TIEN UN ROL";}
 			}
-		} catch (NullPointerException e) {
-			return "ERROR: La persona que quieres matar no está en el pueblo";
 		} catch (IndexOutOfBoundsException e) {
 			return "ERROR: La persona a la que quieres votar no está en el pueblo";
 		}
@@ -182,11 +203,16 @@ public class ElPuebloDuerme {
 			}
 		}
 
+		Personaje personajeMasVotado=listaPersonajesVivos.get(indice);
 		if(empate){
 			System.out.println("Empate en los votos");
 		}else{
-			System.out.println("El jugador mas votado es= "+listaPersonajesVivos.get(indice));
-			listaPersonajesVivos.get(indice).morir();
+			System.out.println("El jugador mas votado es= "+personajeMasVotado.getNombreJugador());
+			if(personajeMasVotado.estaProtegido()){
+				System.out.println("No se ha podido echar al jugador porque estaba siendo protegido.");
+				return;
+			}
+			personajeMasVotado.morir();
 		}
 
 		this.votos = new int[listaPersonajesVivos.size()];
@@ -219,7 +245,5 @@ public class ElPuebloDuerme {
 	}
 
 	synchronized public void esperarComienzo() throws InterruptedException {wait();}
-	synchronized public void despertarHilos() {
-		notifyAll();
-	}
+	synchronized public void despertarHilos() {notifyAll();}
 }

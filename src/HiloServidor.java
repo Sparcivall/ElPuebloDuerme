@@ -25,7 +25,7 @@ public class HiloServidor extends Thread {
 
 				Socket socketServidor = new Socket();
 
-				socketServidor = this.servidor.accept();// esperando a un cliente
+				socketServidor = this.servidor.accept();
 
 				HiloJuego hilo = new HiloJuego(socketServidor, elPuebloDuerme);
 

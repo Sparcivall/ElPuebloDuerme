@@ -18,35 +18,29 @@ public class HiloJuego extends Thread {
 		this.pueblo = pueblo;
 
 		try {
-
 			this.output = new PrintWriter(socketServidor.getOutputStream(),true);
-
 			this.input = new BufferedReader(new InputStreamReader(socketServidor.getInputStream()));
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public void run() {// ESTE HILO SE COMUNICA CON CADA CLIENTE
+	public void run() {
 		try {
 
 			System.out.println("COMUNICO CON: " + socketServidor.toString());
 
 			output.println("Escribe el nombre de tu personaje");
-
 			String nombreJugador = input.readLine();
 
 			this.personaje = new Personaje(nombreJugador);
 			pueblo.anadirPersonaje(personaje);
 
 			output.println("Tu personaje ha sido registrado!");
-
 			System.out.println(Thread.currentThread().getName() + " se va a dormir esperando al notify()");
 
 			pueblo.esperarComienzo();
-
 			// EMPIEZA LA PARTIDA
 
 			while(true) {
@@ -86,7 +80,7 @@ public class HiloJuego extends Thread {
 		imprimirListaJugadores();
 		Thread.sleep(2000);
 
-		output.println("Se hace de noche...");
+		output.println("Se hace de noche...");// EMPIEZA LA PARTE DEL LOBO
 
 		if(personaje.getRol()==Rol.LOBO){
 			output.println("Escribe el nombre del jugador al que quieras matar");
@@ -96,7 +90,7 @@ public class HiloJuego extends Thread {
 					output.println("Te has comido a " + comando);
 					break;
 				}else{
-					output.println("No puedes matarte a ti mismo ni a jugadores ya muertos.");
+					output.println("Tienes que matar aun humano del pueblo que no este protegido por un guardian.");
 				}
 			}
 		}
@@ -104,6 +98,7 @@ public class HiloJuego extends Thread {
 		pueblo.esperarAlResto(personaje.getNombreJugador()+" esperando en wait ataqueLobo");
 		Thread.sleep(1000);
 
+		//     EMPIZA LA PARTE DE LOS HUMANOS
 		output.println("Se ha hecho de dia!!!\nPero por la noche algo se movio entre las sombras...");
 
 		EstadoPartida actual=comprobarMuertePartida();
@@ -112,6 +107,8 @@ public class HiloJuego extends Thread {
 		}
 
 		imprimirListaJugadores();
+
+		personaje.desproteger();
 
 		output.println(pueblo.getPreguntaPersonaje(personaje.getRol()));
 
@@ -129,7 +126,7 @@ public class HiloJuego extends Thread {
 		}
 		pueblo.esperarAlResto(personaje.getNombreJugador()+" esperando en wait post accion");
 
-		// INTENTO DE QUE SE EJECUTE SOLO UNA VEZ
+		// El lobo es el responsable de contar los votos.
 		if(personaje.getRol()==Rol.LOBO){pueblo.eliminarJugadorMasVotado();}
 		Thread.sleep(500);
 

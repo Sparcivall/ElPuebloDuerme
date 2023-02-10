@@ -4,10 +4,12 @@ public class Personaje {
 	private String nombreJugador;
 	private boolean estaVivo;
 	private Rol rol;
+	private boolean estaSiendoProtegido;
 
 	public Personaje(String nombreJugador) {
 		this.nombreJugador = nombreJugador;
 		this.estaVivo = true;
+		this.estaSiendoProtegido=false;
 	}
 
 	public void asignarRol(Rol rol) {
@@ -40,5 +42,17 @@ public class Personaje {
 
 	public void revivir(){
 		this.estaVivo=true;
+	}
+
+	public void proteger(){
+		this.estaSiendoProtegido=true;
+	}
+
+	public void desproteger(){
+		this.estaSiendoProtegido=false;
+	}
+
+	public boolean estaProtegido(){
+		return this.estaSiendoProtegido;
 	}
 }

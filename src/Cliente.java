@@ -11,14 +11,10 @@ public class Cliente {
 			Socket cliente = new Socket("localhost", Servidor.PUERTO);
 
 			HiloCliente hiloCliente = new HiloCliente(cliente);
-			// Hacemos un hilo que este imprimiendo constantemente cualquier
-			// mensaje que mande el servidor
+
 			hiloCliente.start();
 
-			//
-
-			PrintWriter output = new PrintWriter(cliente.getOutputStream(),
-					true);
+			PrintWriter output = new PrintWriter(cliente.getOutputStream(),true);
 
 			Scanner sc = new Scanner(System.in);
 
@@ -26,7 +22,6 @@ public class Cliente {
 			while (cadena != null) {
 
 				cadena = sc.nextLine();
-
 				output.println(cadena);
 			}
 
